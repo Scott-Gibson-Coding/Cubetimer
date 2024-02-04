@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && firebase deploy",
+    "vitest": "echo unit testing not implemented...",
+    "cypress": "echo e2e testing not implemented..."
   },
   "dependencies": {
     "react": "^18.2.0",
