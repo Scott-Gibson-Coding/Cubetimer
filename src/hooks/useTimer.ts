@@ -18,37 +18,37 @@ function useTimer(): UseTimerReturn {
   const epoch = 36;
   /** State: Timer start time found by Date.now() */
   const [startTime, setStartTime] = useState<number | null>(null);
+  /** State: Boolean flag for when the timer is active */
+  const [active, setActive] = useState(false);
   /** State: Current time elapsed returned from hook */
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
-  /** Ref: Holds the setInterval value */
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   /** Start the timer by setting up an interval */
   function timerStart() {
     setStartTime(Date.now());
+    setActive(true);
   }
 
   /** Clear the interval and set the final time */
   function timerStop() {
-    clearInterval(intervalRef.current!);
+    setActive(false);
   }
-
-  /** Effect: Remove interval ref if it exists on component unmount */
-  useEffect(() => {
-    return () => {
-      intervalRef.current && clearInterval(intervalRef.current);
-    };
-  }, []);
 
   /** Timer interval will start whenever the startTime is updated. */
   useEffect(() => {
     if (startTime === null) return;
 
-    intervalRef.current = setInterval(() => {
-      setTimeElapsed(Date.now() - startTime);
-    }, epoch);
-    return () => clearInterval(intervalRef.current!);
-  }, [startTime]);
+    let interval: NodeJS.Timeout;
+
+    if (active) {
+      interval = setInterval(() => {
+        setTimeElapsed(Date.now() - startTime);
+      }, epoch);
+    } else {
+      clearInterval(interval!);
+    }
+    return () => clearInterval(interval);
+  }, [active]);
 
   return [timeElapsed, timerStart, timerStop];
 }

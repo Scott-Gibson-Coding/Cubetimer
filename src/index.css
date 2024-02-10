@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply bg-secondary h-screen;
+    @apply max-h-screen bg-secondary;
   }
 }

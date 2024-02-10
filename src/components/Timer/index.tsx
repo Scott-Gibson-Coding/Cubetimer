@@ -1,17 +1,49 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import useTimer from "../../hooks/useTimer";
+import { formatTime, getScramble } from "../../utils";
 
+/**
+ * Timer component
+ */
 const Timer = () => {
   /** useTimer hook */
   const [timeElapsed, timerStart, timerStop] = useTimer();
-  /** Mock scramble */
-  const scramble =
-    "D R2 D2 U' B2 D' R2 U2 R B L' R' F L2 U' L B F2 L F' L2 D' B' U F";
+  /** State: Scramble string */
+  const [scramble, setScramble] = useState(getScramble());
 
+  /** Stop timer on space key down */
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key !== " ") return;
+    timerStop();
+  }
+
+  /**
+   * Start timer behavior:
+   * On first space key up, start timer
+   * On second space key up, do nothing
+   * Repeat this pattern...
+   */
+  const lock = useRef(true);
+  function handleKeyUp(e: KeyboardEvent) {
+    if (e.key !== " ") return;
+    document.addEventListener("keydown", handleKeyDown, { once: true });
+
+    lock.current && timerStart();
+    !lock.current && setScramble(getScramble());
+    lock.current = !lock.current;
+  }
+
+  /**
+   * Effect: On component mount
+   */
   useEffect(() => {
-    timerStart();
+    document.addEventListener("keyup", handleKeyUp);
+    // use { once: true } to prevent calling timerStop more than once
+    document.addEventListener("keydown", handleKeyDown, { once: true });
+    // remove event listeners on component unmount
     return () => {
-      timerStop();
+      document.removeEventListener("keyup", handleKeyUp);
+      document.addEventListener("keydown", handleKeyDown, { once: true });
     };
   }, []);
 
@@ -25,10 +57,7 @@ const Timer = () => {
         </p>
       </div>
       {/* Timer div */}
-      <div className=" text-center text-8xl">
-        {timeElapsed}
-        {/**00:00.000*/}
-      </div>
+      <div className=" text-center text-8xl">{formatTime(timeElapsed)}</div>
     </div>
   );
 };

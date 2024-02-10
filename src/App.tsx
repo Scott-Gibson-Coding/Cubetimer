@@ -15,7 +15,7 @@ function App() {
   ];
 
   return (
-    <div className="m-8 grid grid-cols-[940px_540px] text-lg">
+    <div className="mx-8 grid grid-cols-[940px_540px] text-lg">
       <Timer />
       <Stats solves={mockSolves} />
     </div>
