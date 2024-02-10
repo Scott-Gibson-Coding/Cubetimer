@@ -1,4 +1,4 @@
-import { Timer, Table } from "./components";
+import { Timer, Stats } from "./components";
 import type { Solve } from "./types";
 
 function App() {
@@ -15,9 +15,9 @@ function App() {
   ];
 
   return (
-    <div className="">
+    <div className="m-8 grid grid-cols-[940px_540px] text-lg">
       <Timer />
-      <Table solves={mockSolves} />
+      <Stats solves={mockSolves} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
 import Timer from "./Timer";
-import Table from "./Table";
+import Stats from "./Stats";
 
-export { Timer, Table };
+export { Timer, Stats };
