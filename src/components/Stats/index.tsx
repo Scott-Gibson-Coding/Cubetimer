@@ -1,3 +1,4 @@
+import { formatTime } from "../../utils";
 import type { Solve } from "../../types";
 
 type StatsProps = {
@@ -18,7 +19,9 @@ const Stats = ({ solves }: StatsProps) => {
             {solves.map(({ time }, index) => (
               <li key={index} className="flex justify-around text-dark">
                 <span className="font-semibold">{solves.length - index}</span>
-                <span className="font-mono tracking-tight">{time}</span>
+                <span className="font-mono tracking-tight">
+                  {formatTime(time)}
+                </span>
                 <span className="">
                   <button className="font-semibold underline underline-offset-2">
                     x

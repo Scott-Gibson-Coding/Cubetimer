@@ -3,15 +3,15 @@ import type { Solve } from "./types";
 
 function App() {
   const mockSolves: Array<Solve> = [
-    { time: 5.555 },
-    { time: 6.573 },
-    { time: 8.201 },
-    { time: 5.555 },
-    { time: 6.573 },
-    { time: 8.201 },
-    { time: 5.555 },
-    { time: 6.573 },
-    { time: 8.201 },
+    { time: 5555 },
+    { time: 6573 },
+    { time: 8201 },
+    { time: 5555 },
+    { time: 6573 },
+    { time: 8201 },
+    { time: 5555 },
+    { time: 6573 },
+    { time: 8201 },
   ];
 
   return (
