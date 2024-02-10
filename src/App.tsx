@@ -1,8 +1,7 @@
 import { Timer, Table } from "./components";
 import type { Solve } from "./types";
-import "./cubetimer.css";
 
-function Cubetimer() {
+function App() {
   const mockSolves: Array<Solve> = [
     { time: 5.555 },
     { time: 6.573 },
@@ -16,11 +15,11 @@ function Cubetimer() {
   ];
 
   return (
-    <div className="container">
+    <div className="">
       <Timer />
       <Table solves={mockSolves} />
     </div>
   );
 }
 
-export default Cubetimer;
+export default App;

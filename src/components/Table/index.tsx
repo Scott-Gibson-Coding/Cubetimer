@@ -1,19 +1,18 @@
 import type { Solve } from "../../types";
-import "./style.css";
 
 type TableProps = {
   solves: Array<Solve>;
 };
 const Table = ({ solves }: TableProps) => {
   return (
-    <div className="table-container">
-      <table className="table">
-        <tbody>
+    <div className="">
+      <table className="">
+        <tbody className="">
           {solves.map((solve, index) => (
-            <tr key={index}>
-              <td>{solves.length - index}</td>
-              <td>{solve.time}</td>
-              <td>x</td>
+            <tr key={index} className="">
+              <td className="">{solves.length - index}</td>
+              <td className="">{solve.time}</td>
+              <td className="">x</td>
             </tr>
           ))}
         </tbody>
