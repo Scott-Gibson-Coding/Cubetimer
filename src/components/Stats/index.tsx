@@ -3,15 +3,19 @@ import type { Solve } from "../../types";
 
 type StatsProps = {
   solves: Array<Solve>;
+  clearTimes: () => void;
 };
-const Stats = ({ solves }: StatsProps) => {
+const Stats = ({ solves, clearTimes }: StatsProps) => {
   return (
     <div className="border-2 border-black p-8">
       {/* Stats card */}
       <div className="grid gap-4 rounded-lg bg-primary px-8 py-4 text-light">
         {/* Buttons */}
         <div className="flex justify-center font-semibold underline underline-offset-2">
-          <button>Clear Times</button>
+          {/* Prevent default on mouse down so spacebar doesn't activate clearTimes function call */}
+          <button onClick={clearTimes} onMouseDown={(e) => e.preventDefault()}>
+            Clear Times
+          </button>
         </div>
         {/* Times list card */}
         <div className="mx-auto h-[40vh] w-80 overflow-y-auto rounded border-4 border-slate-700 bg-secondary p-2">

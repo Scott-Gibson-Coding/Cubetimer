@@ -2,50 +2,53 @@ import { useEffect, useRef, useState } from "react";
 import useTimer from "../../hooks/useTimer";
 import { formatTime, getScramble } from "../../utils";
 
+type TimerProps = {
+  addTime: (time: number) => void;
+};
 /**
  * Timer component
  */
-const Timer = () => {
+const Timer = ({ addTime }: TimerProps) => {
   /** useTimer hook */
   const [timeElapsed, timerStart, timerStop] = useTimer();
+  /** State variable to prevent space down from triggering more than once */
+  const [spaceDown, setSpaceDown] = useState(false);
   /** State: Scramble string */
   const [scramble, setScramble] = useState(getScramble());
-
-  /** Stop timer on space key down */
-  function handleKeyDown(e: KeyboardEvent) {
-    if (e.key !== " ") return;
-    timerStop();
-  }
-
-  /**
-   * Start timer behavior:
-   * On first space key up, start timer
-   * On second space key up, do nothing
-   * Repeat this pattern...
-   */
+  /** Ref: Alternate between starting timer, and doing nothing */
   const lock = useRef(true);
-  function handleKeyUp(e: KeyboardEvent) {
-    if (e.key !== " ") return;
-    document.addEventListener("keydown", handleKeyDown, { once: true });
 
-    lock.current && timerStart();
-    !lock.current && setScramble(getScramble());
-    lock.current = !lock.current;
-  }
-
-  /**
-   * Effect: On component mount
-   */
   useEffect(() => {
-    document.addEventListener("keyup", handleKeyUp);
-    // use { once: true } to prevent calling timerStop more than once
-    document.addEventListener("keydown", handleKeyDown, { once: true });
-    // remove event listeners on component unmount
+    /** Stop timer on space key down */
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key !== " " || spaceDown || lock.current) return;
+
+      timerStop();
+      setSpaceDown(true);
+      addTime(timeElapsed);
+    }
+
+    /** Start timer on key up */
+    function handleKeyUp(e: KeyboardEvent) {
+      if (e.key !== " ") return;
+      setSpaceDown(false);
+
+      if (lock.current) {
+        lock.current && timerStart();
+      } else {
+        setScramble(getScramble());
+      }
+      lock.current = !lock.current;
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
     return () => {
-      document.removeEventListener("keyup", handleKeyUp);
-      document.addEventListener("keydown", handleKeyDown, { once: true });
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
-  }, []);
+  }, [spaceDown, timerStart, timerStop, addTime]);
 
   return (
     <div className="grid content-center gap-2 border-2 border-black px-8 font-mono">

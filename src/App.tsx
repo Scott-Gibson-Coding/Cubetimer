@@ -1,23 +1,22 @@
+import { useState } from "react";
 import { Timer, Stats } from "./components";
 import type { Solve } from "./types";
 
 function App() {
-  const mockSolves: Array<Solve> = [
-    { time: 5555 },
-    { time: 6573 },
-    { time: 8201 },
-    { time: 5555 },
-    { time: 6573 },
-    { time: 8201 },
-    { time: 5555 },
-    { time: 6573 },
-    { time: 8201 },
-  ];
+  const [solves, setSolves] = useState<Solve[]>([]);
+
+  function handleAddTime(newTime: number) {
+    setSolves((solves) => [{ time: newTime }, ...solves]);
+  }
+
+  function handleClearTimes() {
+    setSolves([]);
+  }
 
   return (
     <div className="mx-8 grid grid-cols-[940px_540px] text-lg">
-      <Timer />
-      <Stats solves={mockSolves} />
+      <Timer addTime={(time) => handleAddTime(time)} />
+      <Stats solves={solves} clearTimes={handleClearTimes} />
     </div>
   );
 }
