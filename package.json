@@ -13,6 +13,7 @@
     "cypress": "echo e2e testing not implemented..."
   },
   "dependencies": {
+    "firebase": "^10.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
