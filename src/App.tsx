@@ -14,7 +14,7 @@ function App() {
   }
 
   return (
-    <div className="mx-8 grid grid-cols-[940px_540px] text-lg">
+    <div className="grid grid-cols-[1fr_1fr] text-lg">
       <Timer addTime={(time) => handleAddTime(time)} />
       <Stats solves={solves} clearTimes={handleClearTimes} />
     </div>

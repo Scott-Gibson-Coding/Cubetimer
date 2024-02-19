@@ -1,0 +1,17 @@
+{
+  "name": "Cubetimer",
+  "short_name": "Cubetimer",
+  "description": "Simple cubetimer application for speedsolving.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ccc",
+  "theme_color": "#eee",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/jpg",
+      "sizes": "512x512"
+    }
+  ],
+  "orientation": "landscape"
+}
