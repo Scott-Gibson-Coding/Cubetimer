@@ -3,15 +3,20 @@
   "short_name": "Cubetimer",
   "description": "Simple cubetimer application for speedsolving.",
   "start_url": "/index.html",
-  "display": "standalone",
   "background_color": "#ccc",
   "theme_color": "#eee",
   "icons": [
     {
-      "src": "icon.png",
-      "type": "image/jpg",
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
+  "display": "standalone",
   "orientation": "landscape"
 }
