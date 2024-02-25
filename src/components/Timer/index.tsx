@@ -1,14 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+/** Import React hooks */
+import { useState, useEffect, useRef, useContext } from "react";
+/** Import Custom Hooks */
 import useTimer from "../../hooks/useTimer";
+/** Import Contexts */
+import { SolvesContext } from "../../contexts/SolvesContext";
+/** Import Utils */
 import { formatTime, getScramble } from "../../utils";
 
-type TimerProps = {
-  addTime: (time: number) => void;
-};
 /**
  * Timer component
  */
-const Timer = ({ addTime }: TimerProps) => {
+const Timer = () => {
+  /** Context */
+  const { addSolve } = useContext(SolvesContext);
+
   /** useTimer hook */
   const [timeElapsed, timerStart, timerStop] = useTimer();
   /** State variable to prevent space down from triggering more than once */
@@ -25,7 +30,7 @@ const Timer = ({ addTime }: TimerProps) => {
 
       timerStop();
       setSpaceDown(true);
-      addTime(timeElapsed);
+      addSolve({ time: timeElapsed });
     }
 
     /** Start timer on key up */
@@ -48,7 +53,7 @@ const Timer = ({ addTime }: TimerProps) => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [spaceDown, timerStart, timerStop, addTime]);
+  }, [spaceDown, timerStart, timerStop, addSolve]);
 
   return (
     <div className="grid content-center gap-2 border-2 border-black px-8 font-mono">
