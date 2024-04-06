@@ -1,5 +1,5 @@
 /** Import React hooks */
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useCallback } from "react";
 /** Import Custom Hooks */
 import useTimer from "../../hooks/useTimer";
 /** Import Contexts */
@@ -15,45 +15,50 @@ const Timer = () => {
   const { addSolve } = useContext(SolvesContext);
 
   /** useTimer hook */
-  const [timeElapsed, timerStart, timerStop] = useTimer();
-  /** State variable to prevent space down from triggering more than once */
-  const [spaceDown, setSpaceDown] = useState(false);
+  const { timeElapsed, timerStart, timerStop } = useTimer();
   /** State: Scramble string */
   const [scramble, setScramble] = useState(getScramble());
-  /** Ref: Alternate between starting timer, and doing nothing */
-  const lock = useRef(true);
+  /** Ref: Use to swich between mouse up starting timer, and doing nothing. */
+  const lockRef = useRef(true);
 
-  useEffect(() => {
-    /** Stop timer on space key down */
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key !== " " || spaceDown || lock.current) return;
-
-      timerStop();
-      setSpaceDown(true);
-      addSolve({ time: timeElapsed });
-    }
-
-    /** Start timer on key up */
-    function handleKeyUp(e: KeyboardEvent) {
+  /** Key down event handler - Stop timer if in progress. */
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
       if (e.key !== " ") return;
-      setSpaceDown(false);
+      timerStop();
+      addSolve(timeElapsed);
+      setScramble(getScramble());
+    },
+    [addSolve, timeElapsed, timerStop],
+  );
 
-      if (lock.current) {
-        lock.current && timerStart();
-      } else {
-        setScramble(getScramble());
+  /** Key up event handler */
+  const handleKeyUp = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== " ") return;
+      if (lockRef.current) {
+        timerStart();
+        document.addEventListener("keydown", handleKeyDown, {
+          once: true,
+        });
       }
-      lock.current = !lock.current;
-    }
+      lockRef.current = !lockRef.current;
+    },
+    [timerStart, handleKeyDown],
+  );
 
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
+  /** Effect: Add key up event listener on component mount. */
+  useEffect(() => {
+    document.addEventListener("keyup", handleKeyUp);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
+      document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [spaceDown, timerStart, timerStop, addSolve]);
+  }, [handleKeyUp]);
+
+  /** Effect: Remove the keydown event when the callback changes or the component unmounts. */
+  useEffect(() => {
+    document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <div className="grid content-center gap-2 border-2 border-black px-8 font-mono">

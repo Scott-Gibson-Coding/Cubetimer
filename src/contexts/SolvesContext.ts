@@ -4,7 +4,7 @@ import type { Solve } from "../types";
 /** @todo Replace contents with reducer */
 type SolvesContext = {
   solves: Solve[];
-  addSolve: (solve: Solve) => void;
+  addSolve: (time: number) => void;
   deleteSolve: (index: number) => void;
   clearSolves: () => void;
 };

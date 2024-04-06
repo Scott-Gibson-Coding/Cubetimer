@@ -1,19 +1,11 @@
 import { useState, useEffect } from "react";
 
 /**
- * Return types from useTimer
- *
- * - timeElapsed: number
- * - startTimer: () => void
- * - endTimer: () => void
- */
-type UseTimerReturn = [number, () => void, () => void];
-/**
  * useTimer hook
  *
  * Exposes timeElapsed state, and functions to interact with the timer.
  */
-function useTimer(): UseTimerReturn {
+function useTimer() {
   /** Interval interrupt in ms. */
   const epoch = 36;
   /** State: Timer start time found by Date.now() */
@@ -48,9 +40,9 @@ function useTimer(): UseTimerReturn {
       clearInterval(interval!);
     }
     return () => clearInterval(interval);
-  }, [active]);
+  }, [active, startTime]);
 
-  return [timeElapsed, timerStart, timerStop];
+  return { active, timeElapsed, timerStart, timerStop };
 }
 
 export default useTimer;
