@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SolvesContext } from "./contexts/SolvesContext";
-import { Timer, Stats } from "./components";
+import { Timer, Stats, Summary } from "./components";
 import {
   updateLocalStorage,
   fetchLocalStorage,
@@ -38,14 +38,15 @@ function App() {
   }
 
   return (
-    <div className="grid grid-cols-[1fr_1fr] text-lg">
-      <SolvesContext.Provider
-        value={{ solves, addSolve, deleteSolve, clearSolves }}
-      >
+    <SolvesContext.Provider
+      value={{ solves, addSolve, deleteSolve, clearSolves }}
+    >
+      <div className="grid grid-cols-[2fr_1fr_1fr] text-lg">
         <Timer />
         <Stats />
-      </SolvesContext.Provider>
-    </div>
+        <Summary />
+      </div>
+    </SolvesContext.Provider>
   );
 }
 

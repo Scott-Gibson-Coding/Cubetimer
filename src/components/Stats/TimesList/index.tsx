@@ -9,7 +9,7 @@ function TimesList() {
   const { solves, deleteSolve } = useContext(SolvesContext);
 
   return (
-    <div className="mx-auto h-[40vh] w-80 overflow-y-auto rounded border-4 border-slate-700 bg-secondary p-2">
+    <div className="mx-auto h-[40vh] w-full overflow-y-auto rounded border-4 border-slate-700 bg-secondary p-2">
       <ul>
         {solves.map(({ time }, index) => (
           <li key={index} className="flex justify-around text-dark">

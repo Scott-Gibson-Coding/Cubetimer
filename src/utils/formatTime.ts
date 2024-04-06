@@ -4,6 +4,7 @@
  * @param time - Time in milliseconds
  */
 export default function formatTime(time: number) {
+  time = Math.round(time);
   const ms = time % 1000;
   time = Math.round((time - ms) / 1000);
   const sec = time % 60;
