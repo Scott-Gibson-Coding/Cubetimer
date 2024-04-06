@@ -15,6 +15,11 @@ const Summary = () => {
     return minTime;
   }, [solves]);
 
+  const getAvg = useCallback(() => {
+    if (solves.length === 0) return 0;
+    return solves.reduce((acc, cur) => acc + cur.time, 0) / solves.length;
+  }, [solves]);
+
   const getAvg5 = useCallback(() => {
     if (solves.length === 0) return 0;
     const subset = solves.slice(0, 5);
@@ -33,6 +38,9 @@ const Summary = () => {
         <h1 className="text-center text-xl font-semibold">Summary</h1>
         <div className="mx-auto h-[40vh] w-full overflow-y-auto rounded border-4 border-slate-700 bg-secondary p-2">
           <p className="text-slate-800">Best Solve: {formatTime(getBest())}</p>
+          <p className="text-slate-800">
+            Session Average: {formatTime(getAvg())}
+          </p>
           <p className="text-slate-800">
             Average of 5: {formatTime(getAvg5())}
           </p>
