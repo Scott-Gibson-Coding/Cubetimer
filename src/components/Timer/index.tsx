@@ -11,23 +11,24 @@ import { formatTime, getScramble } from "../../utils";
  * Timer component
  */
 const Timer = () => {
-  /** Context */
+  /** Solves context */
   const { addSolve } = useContext(SolvesContext);
-
   /** useTimer hook */
   const { timeElapsed, timerStart, timerStop } = useTimer();
   /** State: Scramble string */
   const [scramble, setScramble] = useState(getScramble());
-  /** Ref: Use to swich between mouse up starting timer, and doing nothing. */
+  /** Ref: Use to switch between mouse up starting timer, and doing nothing. */
   const lockRef = useRef(true);
 
   /** Key down event handler - Stop timer if in progress. */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key !== " ") return;
-      timerStop();
-      addSolve(timeElapsed);
-      setScramble(getScramble());
+      if (e.repeat || e.key !== " ") return;
+      if (!lockRef.current) {
+        timerStop();
+        addSolve(timeElapsed);
+        setScramble(getScramble());
+      }
     },
     [addSolve, timeElapsed, timerStop],
   );
@@ -50,15 +51,12 @@ const Timer = () => {
   /** Effect: Add key up event listener on component mount. */
   useEffect(() => {
     document.addEventListener("keyup", handleKeyUp);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keyup", handleKeyUp);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleKeyUp]);
-
-  /** Effect: Remove the keydown event when the callback changes or the component unmounts. */
-  useEffect(() => {
-    document.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+  }, [handleKeyDown, handleKeyUp]);
 
   return (
     <div className="grid content-center gap-2 border-2 border-black px-8 font-mono">

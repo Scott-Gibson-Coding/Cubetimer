@@ -3,12 +3,14 @@
  * since the user can opt out of local storage. This throws a SecurityError.
  */
 
+import { Solve } from "../types";
+
 /**
  * @todo Implement this function
  */
-export function updateLocalStorage() {
+export function updateLocalStorage(solves: Solve[]) {
   try {
-    localStorage.setItem("solves-list", "not implemented yet");
+    localStorage.setItem("solves-list", JSON.stringify(solves));
   } catch (error) {
     console.error(error);
   }
@@ -17,12 +19,15 @@ export function updateLocalStorage() {
 /**
  * @todo Implement this function
  */
-export function fetchLocalStorage() {
+export function fetchLocalStorage(): Solve[] {
   try {
-    localStorage.getItem("solves-list");
+    const solvesListJson = localStorage.getItem("solves-list");
+    if (!solvesListJson) return [];
+    return JSON.parse(solvesListJson) as Solve[];
   } catch (error) {
     console.error(error);
   }
+  return [];
 }
 
 /**
